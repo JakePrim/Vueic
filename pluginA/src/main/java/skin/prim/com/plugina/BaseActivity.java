@@ -1,6 +1,7 @@
 package skin.prim.com.plugina;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
@@ -156,6 +157,17 @@ public class BaseActivity extends AppCompatActivity implements PluginInterfaceAc
             mActivity.startActivity(intent1);
         } else {
             super.startActivity(intent);
+        }
+    }
+
+    @Override
+    public ComponentName startService(Intent service) {
+        if (mActivity != null) {
+            Intent m = new Intent();
+            m.putExtra("serviceName", service.getComponent().getClassName());
+            return mActivity.startService(m);
+        } else {
+            return super.startService(service);
         }
     }
 }

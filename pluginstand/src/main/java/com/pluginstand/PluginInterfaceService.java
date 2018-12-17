@@ -16,6 +16,8 @@ public interface PluginInterfaceService {
 
     void onStart(Intent intent, int startId);
 
+    int onStartCommand(Intent intent, int flags, int startId);
+
     void onDestroy();
 
     void onConfigurationChanged(Configuration newConfig);

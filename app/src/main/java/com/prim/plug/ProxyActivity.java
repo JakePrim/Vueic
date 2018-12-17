@@ -1,6 +1,8 @@
 package com.prim.plug;
 
 import android.app.Activity;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -65,6 +67,14 @@ public class ProxyActivity extends AppCompatActivity {
         Intent intent1 = new Intent(this, ProxyActivity.class);
         intent1.putExtra("className", className);
         super.startActivity(intent1);
+    }
+
+    @Override
+    public ComponentName startService(Intent service) {
+        String serviceName = service.getStringExtra("serviceName");
+        Intent intent = new Intent(this, ProxyService.class);
+        intent.putExtra("serviceName", serviceName);
+        return super.startService(intent);
     }
 
     //对外
