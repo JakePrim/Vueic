@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author prim
  * @version 1.0.0
- * @desc 插桩 中间跳转
+ * @desc 插桩 中间跳转 需要在manifest中注册
  * @time 2018/7/25 - 下午11:03
  */
 public class ProxyActivity extends AppCompatActivity {

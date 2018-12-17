@@ -2,9 +2,9 @@ package com.prim.plug;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 
 import com.pluginstand.PluginInterfaceService;
 
@@ -16,15 +16,13 @@ import dalvik.system.DexClassLoader;
 /**
  * @author prim
  * @version 1.0.0
- * @desc
+ * @desc 插桩 service 需要在manifest中注册
  * @time 2018/12/17 - 5:32 PM
  */
 public class ProxyService extends Service {
+    private String serviceName;
 
-
-    String serviceName;
-
-    PluginInterfaceService pluginInterfaceService;
+    private PluginInterfaceService pluginInterfaceService;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -64,6 +62,48 @@ public class ProxyService extends Service {
             init(intent);
         }
         return pluginInterfaceService.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
+        pluginInterfaceService.onStart(intent, startId);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        pluginInterfaceService.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        pluginInterfaceService.onLowMemory();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        pluginInterfaceService.onTrimMemory(level);
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        pluginInterfaceService.onUnbind(intent);
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        pluginInterfaceService.onRebind(intent);
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        pluginInterfaceService.onTaskRemoved(rootIntent);
     }
 
     @Override
