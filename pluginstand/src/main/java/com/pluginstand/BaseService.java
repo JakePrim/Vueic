@@ -1,13 +1,10 @@
-package skin.prim.com.plugina;
+package com.pluginstand;
 
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.pluginstand.PluginInterfaceService;
 
 /**
  * @author prim

@@ -46,7 +46,7 @@ public class ProxyActivity extends AppCompatActivity {
             //注入上下文
             pluginInterfaceActivity.attach(this);
             Bundle bundle = new Bundle();//将一些信息传递
-            bundle.putString("test", "我是宿主给你传递数据");
+            bundle.putString("test", "test --> ");
             pluginInterfaceActivity.onCreate(bundle);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

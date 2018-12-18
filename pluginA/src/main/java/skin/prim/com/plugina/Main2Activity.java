@@ -1,7 +1,8 @@
 package skin.prim.com.plugina;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.pluginstand.BaseActivity;
 
 public class Main2Activity extends BaseActivity {
 

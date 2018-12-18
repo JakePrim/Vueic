@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.pluginstand.BaseService;
+
 /**
  * @author prim
  * @version 1.0.0
@@ -18,7 +20,7 @@ public class OneService extends BaseService {
 
     private static final String TAG = "OneService";
 
-    int i = 0;
+    private int i = 0;
 
     @Override
     public void onCreate() {

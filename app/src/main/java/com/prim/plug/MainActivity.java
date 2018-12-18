@@ -71,7 +71,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadPlugin(View view) {
-        loadDownPlugin();
+        loadDownPlugin("pluginA.apk");
+        Intent intent = new Intent(this, ProxyActivity.class);
+        //得到全类名
+        intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
+        startActivity(intent);
+    }
+
+    public void loadPluginB(View view) {
+        loadDownPlugin("pluginB.apk");
         Intent intent = new Intent(this, ProxyActivity.class);
         //得到全类名
         intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
@@ -81,9 +89,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 模拟加载下载的插件(apk)
      */
-    private void loadDownPlugin() {
+    private void loadDownPlugin(String pluginName) {
         File pluginDir = this.getDir("plugin", MODE_PRIVATE);
-        String pluginName = "pluginA.apk";
         String absolutePath = new File(pluginDir, pluginName).getAbsolutePath();
         File file = new File(absolutePath);
         if (file.exists()) {
@@ -105,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             if (file1.exists()) {
                 Toast.makeText(this, "dex over wirte", Toast.LENGTH_SHORT).show();
             }
-            PluginManager.getInstance().loadPath(this);
+            PluginManager.getInstance().loadPath(this, pluginName);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -124,4 +131,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }

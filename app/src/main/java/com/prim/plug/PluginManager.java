@@ -40,9 +40,9 @@ public class PluginManager {
         return packageInfo;
     }
 
-    public void loadPath(Context context) {
+    public void loadPath(Context context,String pluginName) {
         File pluginDir = context.getDir("plugin", MODE_PRIVATE);
-        String pluginName = "pluginA.apk";
+
         String absolutePath = new File(pluginDir, pluginName).getAbsolutePath();
 
         packageInfo = context.getPackageManager().getPackageArchiveInfo(absolutePath, PackageManager.GET_ACTIVITIES);

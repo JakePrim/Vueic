@@ -11,10 +11,12 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:onClick="loadPlugin"
-       android:text="加载插件"/>
+       android:text="加载插件A"/>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="loadPluginB"
+        android:text="加载插件B"/>
 
 </LinearLayout>
