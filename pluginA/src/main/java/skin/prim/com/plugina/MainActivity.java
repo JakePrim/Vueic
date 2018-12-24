@@ -1,6 +1,7 @@
 package skin.prim.com.plugina;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ public class MainActivity extends BaseActivity {
 
     private TextView pluginA_tv;
 
-    private Button pluginA_btn, pluginA_btn1;
+    private Button pluginA_btn, pluginA_btn1, pluginA_btn2, pluginA_btn3;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +27,25 @@ public class MainActivity extends BaseActivity {
         pluginA_tv.setText("接收宿主传递的数据:" + test);
         pluginA_btn = findViewById(R.id.pluginA_btn);
         pluginA_btn1 = findViewById(R.id.pluginA_btn1);
+        pluginA_btn2 = findViewById(R.id.pluginA_btn2);
+        pluginA_btn3 = findViewById(R.id.pluginA_btn3);
+        pluginA_btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyReceive myReceive = new MyReceive();
+                IntentFilter intentFilter = new IntentFilter();
+                intentFilter.addAction("skin.prim.com.plugina.MyReceive");
+                registerReceiver(myReceive, intentFilter);
+            }
+        });
+        pluginA_btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction("skin.prim.com.plugina.MyReceive");
+                sendBroadcast(intent);
+            }
+        });
         pluginA_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

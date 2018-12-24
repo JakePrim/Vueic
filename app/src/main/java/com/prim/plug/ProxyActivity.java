@@ -1,9 +1,9 @@
 package com.prim.plug;
 
-import android.app.Activity;
-import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -75,6 +75,21 @@ public class ProxyActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProxyService.class);
         intent.putExtra("serviceName", serviceName);
         return super.startService(intent);
+    }
+
+    @Override
+    public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+        //重写真正注册的是ProxyBroadcast 转发
+        IntentFilter filter1 = new IntentFilter();
+        for (int i = 0; i < filter1.countActions(); i++) {
+            filter1.addAction(filter1.getAction(i));
+        }
+        return super.registerReceiver(new ProxyBroadcast(receiver.getClass().getName(), this), filter1);
+    }
+
+    @Override
+    public void sendBroadcast(Intent intent) {
+        super.sendBroadcast(intent);
     }
 
     //对外

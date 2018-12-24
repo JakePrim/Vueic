@@ -7,8 +7,10 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import dalvik.system.DexClassLoader;
 
@@ -59,6 +61,8 @@ public class PluginManager {
             resources = new Resources(assetManager,
                     context.getResources().getDisplayMetrics(),
                     context.getResources().getConfiguration());
+            //解析插件包中manifests是否有静态广播
+//            parserReceive(context,absolutePath);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -69,6 +73,30 @@ public class PluginManager {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * 解析xml静态注册的广播
+     * @param context
+     * @param absolutePath
+     */
+    private void parserReceive(Context context, String absolutePath) {
+        try {
+            //反射获取解析apk包的类
+            Class packageParserClass = Class.forName("android.content.pm.PackageParser");
+            //获取方法
+            Method parsePackage = packageParserClass.getDeclaredMethod("parsePackage",
+                    File.class, int.class);
+            //实例化PackageParser类
+            Object newInstance = packageParserClass.newInstance();
+            //Package 得到
+            Object packageObj = parsePackage.invoke(newInstance, absolutePath, PackageManager.GET_ACTIVITIES);
+            Field receiversField = packageObj.getClass().getDeclaredField("receivers");
+            //获取List<Activity>
+            List receivers = (List) receiversField.get(packageObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Resources getResources() {

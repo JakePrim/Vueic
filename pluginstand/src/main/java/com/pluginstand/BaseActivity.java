@@ -1,8 +1,10 @@
 package com.pluginstand;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -165,6 +167,23 @@ public class BaseActivity extends AppCompatActivity implements PluginInterfaceAc
             return mActivity.startService(m);
         } else {
             return super.startService(service);
+        }
+    }
+
+    @Override
+    public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+        if (mActivity != null) {
+            return mActivity.registerReceiver(receiver, filter);
+        }
+        return super.registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void sendBroadcast(Intent intent) {
+        if (null != mActivity) {
+            mActivity.sendBroadcast(intent);
+        } else {
+            super.sendBroadcast(intent);
         }
     }
 }

@@ -8,8 +8,8 @@ import android.os.IBinder;
 /**
  * @author prim
  * @version 1.0.0
- * @desc
- * @time 2018/12/17 - 5:28 PM
+ * @desc 定义service 插件的标准
+ * * @time 2018/12/17 - 5:28 PM
  */
 public interface PluginInterfaceService {
     void onCreate();
