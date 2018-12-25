@@ -71,25 +71,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadPlugin(View view) {
-        loadDownPlugin("pluginA.apk");
-        Intent intent = new Intent(this, ProxyActivity.class);
-        //得到全类名
-        intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
-        startActivity(intent);
+        boolean loadDownPlugin = loadDownPlugin("pluginA.apk");
+        if (loadDownPlugin) {
+            Intent intent = new Intent(this, ProxyActivity.class);
+            //得到全类名
+            intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
+            startActivity(intent);
+        }
+
     }
 
     public void loadPluginB(View view) {
-        loadDownPlugin("pluginB.apk");
-        Intent intent = new Intent(this, ProxyActivity.class);
-        //得到全类名
-        intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
-        startActivity(intent);
+        boolean loadDownPlugin = loadDownPlugin("pluginB.apk");
+        if (loadDownPlugin) {
+            Intent intent = new Intent(this, ProxyActivity.class);
+            //得到全类名
+            intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
+            startActivity(intent);
+        }
     }
 
     /**
      * 模拟加载下载的插件(apk)
      */
-    private void loadDownPlugin(String pluginName) {
+    private boolean loadDownPlugin(String pluginName) {
         File pluginDir = this.getDir("plugin", MODE_PRIVATE);
         String absolutePath = new File(pluginDir, pluginName).getAbsolutePath();
         File file = new File(absolutePath);
@@ -111,8 +116,10 @@ public class MainActivity extends AppCompatActivity {
             File file1 = new File(absolutePath);
             if (file1.exists()) {
                 Toast.makeText(this, "dex over wirte", Toast.LENGTH_SHORT).show();
+                PluginManager.getInstance().loadPath(this, pluginName);
+                return true;
             }
-            PluginManager.getInstance().loadPath(this, pluginName);
+            Toast.makeText(this, "当前插件不存在，请从项目中打包apk，放到手机scared", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -129,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
+        return false;
     }
 
 
