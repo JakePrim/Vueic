@@ -14,6 +14,8 @@ import com.pluginstand.PluginInterfaceActivity;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author prim
@@ -78,24 +80,29 @@ public class ProxyActivity extends AppCompatActivity {
         return super.startService(intent);
     }
 
-    private ProxyBroadcast proxyBroadcast;
+    private List<ProxyBroadcast> proxyBroadcastList = new ArrayList<>();
 
     @Override
     public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
         //重写真正注册的是ProxyBroadcast 转发
         IntentFilter filter1 = new IntentFilter();
-        for (int i = 0; i < filter1.countActions(); i++) {
-            filter1.addAction(filter1.getAction(i));
+        for (int i = 0; i < filter.countActions(); i++) {
+            filter1.addAction(filter.getAction(i));
             Log.e(TAG, "sendBroadcast: 注册插件的广播 -> " + filter1.getAction(i));
         }
-        proxyBroadcast = new ProxyBroadcast(receiver.getClass().getName(), this);
+        ProxyBroadcast proxyBroadcast = new ProxyBroadcast(receiver.getClass().getName(), this);
+        proxyBroadcastList.add(proxyBroadcast);
         return super.registerReceiver(proxyBroadcast, filter1);
     }
 
     @Override
     public void unregisterReceiver(BroadcastReceiver receiver) {
-        if (proxyBroadcast != null) {
-            super.unregisterReceiver(proxyBroadcast);
+        if (proxyBroadcastList != null && proxyBroadcastList.size() > 0) {
+            for (ProxyBroadcast proxyBroadcast : proxyBroadcastList) {
+                if (proxyBroadcast.getClass().getName().equals(receiver.getClass().getName())) {
+                    super.unregisterReceiver(proxyBroadcast);
+                }
+            }
         } else {
             super.unregisterReceiver(receiver);
         }

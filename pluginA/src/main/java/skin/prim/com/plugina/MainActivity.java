@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         pluginA_tv = findViewById(R.id.pluginA_tv);
         String test = savedInstanceState.getString("test");
-        pluginA_tv.setText("接收宿主传递的数据:" + test);
+        pluginA_tv.setText("接收到宿主传递的数据:" + test);
         pluginA_btn = findViewById(R.id.pluginA_btn);
         pluginA_btn1 = findViewById(R.id.pluginA_btn1);
         pluginA_btn2 = findViewById(R.id.pluginA_btn2);

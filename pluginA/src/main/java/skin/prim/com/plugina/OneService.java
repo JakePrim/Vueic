@@ -3,6 +3,7 @@ package skin.prim.com.plugina;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.pluginstand.BaseService;
 
@@ -25,6 +26,7 @@ public class OneService extends BaseService {
     @Override
     public void onCreate() {
         super.onCreate();
+
         new Thread() {
             @Override
             public void run() {

@@ -7,16 +7,31 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-   <Button
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:onClick="loadPlugin"
-       android:text="加载插件A"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="最早的插件化方案实现：" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="loadPluginB"
-        android:text="加载插件B"/>
+        android:background="@color/colorPrimaryDark"
+        android:onClick="loadPlugin"
+        android:text="加载插件A"
+        android:textColor="#ffffff" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:onClick="loadPluginB"
+        android:text="加载插件B"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="最早的插件化方案实现：" />
 </LinearLayout>
