@@ -18,6 +18,8 @@ public class MainActivity extends BaseActivity {
 
     private Button pluginA_btn, pluginA_btn1, pluginA_btn2, pluginA_btn3;
 
+    private MyReceive myReceive;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +34,7 @@ public class MainActivity extends BaseActivity {
         pluginA_btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyReceive myReceive = new MyReceive();
+                myReceive = new MyReceive();
                 IntentFilter intentFilter = new IntentFilter();
                 intentFilter.addAction("skin.prim.com.plugina.MyReceive");
                 registerReceiver(myReceive, intentFilter);
@@ -72,5 +74,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        //注销广播
+        if (myReceive != null) {
+            unregisterReceiver(myReceive);
+        }
     }
 }

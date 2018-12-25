@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.pluginstand.PluginInterfaceActivity;
 
@@ -77,18 +78,34 @@ public class ProxyActivity extends AppCompatActivity {
         return super.startService(intent);
     }
 
+    private ProxyBroadcast proxyBroadcast;
+
     @Override
     public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
         //重写真正注册的是ProxyBroadcast 转发
         IntentFilter filter1 = new IntentFilter();
         for (int i = 0; i < filter1.countActions(); i++) {
             filter1.addAction(filter1.getAction(i));
+            Log.e(TAG, "sendBroadcast: 注册插件的广播 -> " + filter1.getAction(i));
         }
-        return super.registerReceiver(new ProxyBroadcast(receiver.getClass().getName(), this), filter1);
+        proxyBroadcast = new ProxyBroadcast(receiver.getClass().getName(), this);
+        return super.registerReceiver(proxyBroadcast, filter1);
     }
 
     @Override
+    public void unregisterReceiver(BroadcastReceiver receiver) {
+        if (proxyBroadcast != null) {
+            super.unregisterReceiver(proxyBroadcast);
+        } else {
+            super.unregisterReceiver(receiver);
+        }
+    }
+
+    private static final String TAG = "ProxyActivity";
+
+    @Override
     public void sendBroadcast(Intent intent) {
+        Log.e(TAG, "sendBroadcast: 收到插件发送的广播 -> " + intent.getAction());
         super.sendBroadcast(intent);
     }
 

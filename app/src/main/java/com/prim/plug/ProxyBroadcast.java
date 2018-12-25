@@ -3,6 +3,7 @@ package com.prim.plug;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.pluginstand.PluginInterfaceBroadcast;
 
@@ -18,6 +19,8 @@ public class ProxyBroadcast extends BroadcastReceiver {
     private String className;
 
     private PluginInterfaceBroadcast bordcast;
+
+    private static final String TAG = "ProxyBroadcast";
 
     public ProxyBroadcast(String name, Context context) {
         this.className = name;
@@ -35,6 +38,7 @@ public class ProxyBroadcast extends BroadcastReceiver {
     //class --- object --- p
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e(TAG, "ProxyBroadcast onReceive: ");
         if (bordcast != null) {
             bordcast.onReceive(context, intent);
         }

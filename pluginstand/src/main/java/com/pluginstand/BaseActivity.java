@@ -181,9 +181,19 @@ public class BaseActivity extends AppCompatActivity implements PluginInterfaceAc
     @Override
     public void sendBroadcast(Intent intent) {
         if (null != mActivity) {
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             mActivity.sendBroadcast(intent);
         } else {
             super.sendBroadcast(intent);
+        }
+    }
+
+    @Override
+    public void unregisterReceiver(BroadcastReceiver receiver) {
+        if (null != mActivity) {
+            mActivity.unregisterReceiver(receiver);
+        } else {
+            super.unregisterReceiver(receiver);
         }
     }
 }

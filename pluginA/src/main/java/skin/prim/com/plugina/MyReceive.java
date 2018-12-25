@@ -22,6 +22,5 @@ public class MyReceive extends BroadcastReceiver implements PluginInterfaceBroad
     @Override
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "接收广播成功", Toast.LENGTH_SHORT).show();
-
     }
 }
