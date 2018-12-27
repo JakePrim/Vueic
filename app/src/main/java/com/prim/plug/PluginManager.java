@@ -1,6 +1,9 @@
 package com.prim.plug;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -42,7 +45,7 @@ public class PluginManager {
         return packageInfo;
     }
 
-    public void loadPath(Context context,String pluginName) {
+    public void loadPath(Context context, String pluginName) {
         File pluginDir = context.getDir("plugin", MODE_PRIVATE);
 
         String absolutePath = new File(pluginDir, pluginName).getAbsolutePath();
@@ -61,8 +64,8 @@ public class PluginManager {
             resources = new Resources(assetManager,
                     context.getResources().getDisplayMetrics(),
                     context.getResources().getConfiguration());
-            //解析插件包中manifests是否有静态广播
-//            parserReceive(context,absolutePath);
+            //解析插件包中manifests是否有静态广播，如果存在宿主动态注册广播
+            parserReceive(context, absolutePath);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -77,6 +80,7 @@ public class PluginManager {
 
     /**
      * 解析xml静态注册的广播
+     *
      * @param context
      * @param absolutePath
      */
@@ -88,12 +92,49 @@ public class PluginManager {
             Method parsePackage = packageParserClass.getDeclaredMethod("parsePackage",
                     File.class, int.class);
             //实例化PackageParser类
-            Object newInstance = packageParserClass.newInstance();
+            Object packageParser = packageParserClass.newInstance();
             //Package 得到
-            Object packageObj = parsePackage.invoke(newInstance, absolutePath, PackageManager.GET_ACTIVITIES);
+            Object packageObj = parsePackage.invoke(packageParser, new File(absolutePath), PackageManager.GET_ACTIVITIES);
+            //拿到注册的静态广播
             Field receiversField = packageObj.getClass().getDeclaredField("receivers");
             //获取List<Activity>
             List receivers = (List) receiversField.get(packageObj);
+            //public final static class Activity extends Component<ActivityIntentInfo>
+            //获取Component
+            Class<?> componentClass = Class.forName("android.content.pm.PackageParser$Component");
+            //获取intents
+            Field intentsField = componentClass.getDeclaredField("intents");
+            //generatePackageInfo(PackageParser.Package p,
+            //            int gids[], int flags, long firstInstallTime, long lastUpdateTime,
+            //            HashSet<String> grantedPermissions, PackageUserState state, int userId)
+
+
+            // 调用generateActivityInfo 方法, 把PackageParser.Activity 转换成
+            Class<?> packageParser$ActivityClass = Class.forName("android.content.pm.PackageParser$Activity");
+            // generateActivityInfo方法
+            Class<?> packageUserStateClass = Class.forName("android.content.pm.PackageUserState");
+            Object defaltUserState = packageUserStateClass.newInstance();
+
+            Method generateReceiverInfo = packageParserClass.getDeclaredMethod("generateActivityInfo",
+                    packageParser$ActivityClass, int.class, packageUserStateClass, int.class);
+            //获取userID
+            Class<?> userHandler = Class.forName("android.os.UserHandle");
+            Method getCallingUserIdMethod = userHandler.getDeclaredMethod("getCallingUserId");
+            int userId = (int) getCallingUserIdMethod.invoke(null);
+
+            //循环receivers
+            for (Object activity : receivers) {
+                //拿到ActivityInfo
+                ActivityInfo info = (ActivityInfo) generateReceiverInfo.invoke(packageParser, activity, 0, defaltUserState, userId);
+                //根据ActivityInfo，拿到BroadCastReceiver
+                BroadcastReceiver broadcastReceiver = (BroadcastReceiver) classLoader.loadClass(info.name).newInstance();
+                //拿到intentFilter
+                List<? extends IntentFilter> intentFilters = (List<? extends IntentFilter>) intentsField.get(activity);
+                for (IntentFilter filter : intentFilters) {
+                    //动态注册插件中的静态广播
+                    context.registerReceiver(broadcastReceiver, filter);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

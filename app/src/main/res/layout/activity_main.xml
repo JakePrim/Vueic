@@ -29,6 +29,12 @@
         android:text="加载插件B"
         android:textColor="#ffffff" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发送插件广播"
+        android:onClick="sendCast"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

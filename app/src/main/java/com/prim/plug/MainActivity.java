@@ -1,6 +1,9 @@
 package com.prim.plug;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -19,11 +22,21 @@ import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String ACTION = "com.prim.plugin.host";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerReceiver(broadcastReceiver, new IntentFilter(ACTION));
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "我是宿主，收到插件的消息，握手完成", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onStart() {
@@ -78,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
             startActivity(intent);
         }
-
     }
 
     public void loadPluginB(View view) {
@@ -140,4 +152,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void sendCast(View view) {
+        Intent intent = new Intent("com.prim.plugin.a");
+        sendBroadcast(intent);
+    }
 }

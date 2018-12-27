@@ -16,7 +16,8 @@ public class MainActivity extends BaseActivity {
 
     private TextView pluginA_tv;
 
-    private Button pluginA_btn, pluginA_btn1, pluginA_btn2, pluginA_btn3;
+    private Button pluginA_btn, pluginA_btn1, pluginA_btn2, pluginA_btn3, pluginA_btn4;
+
 
     private MyReceive myReceive;
 
@@ -31,6 +32,7 @@ public class MainActivity extends BaseActivity {
         pluginA_btn1 = findViewById(R.id.pluginA_btn1);
         pluginA_btn2 = findViewById(R.id.pluginA_btn2);
         pluginA_btn3 = findViewById(R.id.pluginA_btn3);
+        pluginA_btn4 = findViewById(R.id.pluginA_btn4);
         pluginA_btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +64,14 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startService(new Intent(mActivity, OneService.class));
+            }
+        });
+
+        pluginA_btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("com.prim.plugin.a");
+                sendBroadcast(intent);
             }
         });
     }

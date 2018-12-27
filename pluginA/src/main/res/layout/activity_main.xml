@@ -37,12 +37,18 @@
         android:id="@+id/pluginA_btn3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="动态注册广播"/>
+        android:text="动态注册广播" />
 
     <Button
         android:id="@+id/pluginA_btn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="发送广播" />
+        android:text="发送动态广播" />
+
+    <Button
+        android:id="@+id/pluginA_btn4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发送静态广播" />
 
 </LinearLayout>

@@ -17,6 +17,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".Main2Activity"></activity>
+
+        <receiver android:name=".StaticBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.prim.plugin.a" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
