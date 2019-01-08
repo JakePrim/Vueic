@@ -39,5 +39,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="最早的插件化方案实现：" />
+        android:text="Hook技术方案实现：" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="集中式登录"
+        android:onClick="login"/>
 </LinearLayout>

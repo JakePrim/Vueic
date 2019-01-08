@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,6 +23,9 @@
         <activity android:name=".ProxyActivity" />
 
         <service android:name=".ProxyService" />
+
+        <activity android:name=".SecondActivity"></activity>
+        <activity android:name=".HookActivity" />
     </application>
 
 </manifest>

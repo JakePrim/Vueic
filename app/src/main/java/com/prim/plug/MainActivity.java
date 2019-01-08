@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "当前插件不存在，请从项目中打包apk，放到手机scared", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            Toast.makeText(this, "当前插件不存在，请从项目中打包apk，放到手机scared", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -155,5 +156,10 @@ public class MainActivity extends AppCompatActivity {
     public void sendCast(View view) {
         Intent intent = new Intent("com.prim.plugin.a");
         sendBroadcast(intent);
+    }
+
+    public void login(View view) {
+        Intent intent = new Intent(this, SecondActivity.class);
+        startActivity(intent);
     }
 }
