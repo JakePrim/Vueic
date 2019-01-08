@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProxyActivity" />
+        <activity android:name=".ProxyActivity" android:launchMode="standard" />
 
         <service android:name=".ProxyService" />
 
