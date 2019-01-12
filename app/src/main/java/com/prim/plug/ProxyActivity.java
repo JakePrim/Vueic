@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.pluginstand.PluginInterfaceActivity;
+import com.prim.plug.plugin.PluginManager;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

@@ -1,12 +1,17 @@
-package com.prim.plug;
+package com.prim.plug.plugin;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import com.prim.plug.CollentActivity;
+import com.prim.plug.CommentActivity;
+import com.prim.plug.HookActivity;
+import com.prim.plug.LoginActivity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -16,13 +21,32 @@ import java.lang.reflect.Proxy;
 /**
  * @author prim
  * @version 1.0.0
- * @desc
+ * @desc 基于Android API 28实现
  * @time 2019/1/7 - 10:23 PM
  */
 public class HookUtils {
     private Context context;
+    public static HookUtils hookUtils;
 
-    public void hookMh(Context context) {
+
+    public static HookUtils getInstance() {
+        if (hookUtils == null) {
+            synchronized (HookUtils.class) {
+                if (hookUtils == null) {
+                    hookUtils = new HookUtils();
+                }
+            }
+        }
+        return hookUtils;
+    }
+
+    public void init(Context context) {
+        this.context = context;
+        hookStartActivity();
+        hookMh();
+    }
+
+    public void hookMh() {
         try {
             Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
             //获取静态属性
@@ -38,12 +62,8 @@ public class HookUtils {
             Field mCallback = Handler.class.getDeclaredField("mCallback");
             mCallback.setAccessible(true);
             //设置callback
-            mCallback.set(mHField, new activityMH(mHObj));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+            mCallback.set(mHObj, new activityMH(mHObj));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -58,11 +78,11 @@ public class HookUtils {
 
         @Override
         public boolean handleMessage(Message msg) {
+            Log.e(TAG, "handleMessage: " + msg.what);
             switch (msg.what) {
-                case 100://即将要加载一个Activity
+                case 159://即将要加载一个Activity
                     //加工完一定要丢给系统
                     handleLunchActivity(msg);
-                    break;
             }
             //做了真正的跳转
             mh.handleMessage(msg);
@@ -70,25 +90,38 @@ public class HookUtils {
         }
     }
 
+    private static final String TAG = "HookUtils";
+
     private void handleLunchActivity(Message msg) {
         //还原
         Object obj = msg.obj;
         try {
+            Log.e(TAG, "handleLunchActivity: msg -> "+obj );
             Field intent = obj.getClass().getDeclaredField("intent");
             intent.setAccessible(true);
             //真实对Intent --》HookActivity 真正对载入
             Intent realIntent = (Intent) intent.get(obj);
-            //还原
+            //还原真实的Intent
             Intent oldIntent = realIntent.getParcelableExtra("realIntent");
-            if (oldIntent != null){
+            if (oldIntent != null) {
                 //判断是否登录
                 //如果登录了 跳转到原有的意图
-                realIntent.setComponent(oldIntent.getComponent());
-
-                //如果没有登录 跳转到登录界面
-                ComponentName componentName = new ComponentName(context,SecondActivity.class);
-                realIntent.setComponent(componentName);
-
+                SharedPreferences login = context.getSharedPreferences("login", Context.MODE_PRIVATE);
+                boolean isLogin = login.getBoolean("isLogin", false);
+                String className = oldIntent.getComponent().getClassName();
+                Log.e(TAG, "--------------------handleLunchActivity----------------------");
+                Log.e(TAG, "className:" + className + " isLogin:" + isLogin);
+                if (!isLogin &&
+                        (className.equals(CommentActivity.class.getName())
+                                || className.equals(CollentActivity.class.getName()))) {//添加劫持白名单 需要登录的界面
+                    //如果没有登录 跳转到登录界面
+                    ComponentName componentName = new ComponentName(context, LoginActivity.class);
+                    //登录成功后要跳转Activity
+                    realIntent.putExtra("extraIntent", oldIntent.getComponent().getClassName());
+                    realIntent.setComponent(componentName);
+                } else {//已经登录成功就继续之前的
+                    realIntent.setComponent(oldIntent.getComponent());
+                }
             }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -97,11 +130,10 @@ public class HookUtils {
         }
     }
 
-    public void hookStartActivity(Context context) {
+    public void hookStartActivity() {
         //Android API 28
         //还原 getService IActivityManagerSingleton 反射
         try {
-            this.context = context;
             Class<?> activityManagerClass = Class.forName("android.app.ActivityManager");
             //拿到成员变量
             Field activityManagerSingleton = activityManagerClass.getDeclaredField("IActivityManagerSingleton");

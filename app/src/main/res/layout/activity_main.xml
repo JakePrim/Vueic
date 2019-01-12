@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="最早的插件化方案实现：" />
+        android:text="插桩式方案实现：" />
 
     <Button
         android:layout_width="wrap_content"

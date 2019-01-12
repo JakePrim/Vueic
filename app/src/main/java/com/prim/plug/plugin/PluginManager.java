@@ -1,4 +1,4 @@
-package com.prim.plug;
+package com.prim.plug.plugin;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

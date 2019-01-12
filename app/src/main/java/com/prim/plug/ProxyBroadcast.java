@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.pluginstand.PluginInterfaceBroadcast;
+import com.prim.plug.plugin.PluginManager;
 
 import java.lang.reflect.Constructor;
 

@@ -20,11 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProxyActivity" android:launchMode="standard" />
+        <activity
+            android:name=".ProxyActivity"
+            android:launchMode="standard" />
 
         <service android:name=".ProxyService" />
-
-        <activity android:name=".SecondActivity"></activity>
+        <activity android:name=".SecondActivity" />
         <activity android:name=".HookActivity" />
     </application>
 

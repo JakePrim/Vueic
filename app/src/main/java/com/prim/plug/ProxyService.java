@@ -11,6 +11,7 @@ import com.pluginstand.PluginInterfaceService;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import com.prim.plug.plugin.PluginManager;
 import dalvik.system.DexClassLoader;
 
 /**

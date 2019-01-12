@@ -12,7 +12,5 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        HookUtils hookUtils = new HookUtils();
-        hookUtils.hookStartActivity(this);
     }
 }
